@@ -8,6 +8,13 @@ type ValidSign = {
     avaImg: string
 }
 
+type UserType = {
+    _id: string,
+    username: string,
+    password: string,
+    _v: number;
+}
+
 export const signUp = async (req: Request, res: Response) => {
     try {
         const { username, password }: Required<ValidSign> = req.body;
@@ -22,7 +29,7 @@ export const signUp = async (req: Request, res: Response) => {
                 console.log('error at signUp', error);
             }
         })
-        return res.status(201).send({ success: true })
+        return res.status(201).send({ success: true, note: "New User is registered successfully"})
     } catch (error: any) {
         return res.status(400).send
     }
@@ -50,32 +57,35 @@ export const getOneUser = async function (req: Request, res: Response) {
             return res.status(200).send({ success: true, oneUser })
         }
     } catch (error: unknown) {
+        console.log(error);
         return res.status(400).send(error);
     }
 }
 
 // Checking user's information
 
-export const login = async function (req: Request, res: Response) {
-    const { username, password }: { username: String, password: String } = req.body
+export const login = async (req: Request, res: Response) => {
     try {
-        const desiredUser = await UserModel.findOne({ username })
+        const { username, password } : { username: string; password: string } = req.body
+
+        const desiredUser: UserType | null = await UserModel.findOne({ username })
         if (!desiredUser) {
-            return res.status(400).send({ success: false, note: "user cannot be found" })
+            return res.status(400).send({success: false, note: "User cannot be found"})
         }
-        console.log(password, 'this is password');
-
-        bcrypt.compare(password, desiredUser.password, async function (err, isMatch) {
-            if (!isMatch) {
-                return res.send({ success: false, note: 'username or password dont match' })
+        bcrypt.compare(password, desiredUser.password, async function(isMAtch) {
+            if (!isMAtch) {
+                return res.status(400).send({
+                    success: false, 
+                    note: "Username or Password are mutually exclsuive"
+                });
             } else {
-                return res.send({ success: true, desiredUser })
+                return res.send({
+                    success:true,
+                    desiredUser
+                })
             }
-        })
-
-    } catch (error: unknown) {
-        // return res.status(400).send(error)
-        console.log(error);
-
+        });
+    } catch (error) {
+        console.log("error at checking", error);
     }
 }

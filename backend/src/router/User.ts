@@ -10,7 +10,7 @@ auth.route('/user')
     .get(getOneUser)
 
 auth.route('/login')
-    .get(login)
+    .post(login)
 
 auth.route('/signup')
     .post(signUp)
