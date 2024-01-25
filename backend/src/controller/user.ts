@@ -18,12 +18,12 @@ type UserType = {
 export const signUp = async (req: Request, res: Response) => {
     try {
         const { username, password }: Required<ValidSign> = req.body;
-
+        console.log(password)
         const saltRounds = 10;
 
         bcrypt.hash(password, saltRounds, async function (err, hash) {
             try {
-                const result = await UserModel.create({ username, passwrord: hash });
+                const result = await UserModel.create({ username, password: hash });
                 console.log(result);
             } catch (error) {
                 console.log('error at signUp', error);
@@ -64,25 +64,20 @@ export const getOneUser = async function (req: Request, res: Response) {
 
 // Checking user's information
 
-export const login = async (req: Request, res: Response) => {
+export const login = async function (req: Request, res: Response) {
+    const { username, password }: { username: String, password: String } = req.body
     try {
-        const { username, password } : { username: string; password: string } = req.body
-
-        const desiredUser: UserType | null = await UserModel.findOne({ username })
+        const desiredUser = await UserModel.findOne({ username })
         if (!desiredUser) {
-            return res.status(400).send({success: false, note: "User cannot be found"})
+            return res.status(400).send({ success: false, note: "user cannot be found" })
         }
-        bcrypt.compare(password, desiredUser.password, async function(isMAtch) {
-            if (!isMAtch) {
-                return res.status(400).send({
-                    success: false, 
-                    note: "Username or Password are mutually exclsuive"
-                });
+        console.log(password, 'this is password');
+
+        bcrypt.compare(password, desiredUser.password, async function (err, isMatch) {
+            if (!isMatch) {
+                return res.send({ success: false, note: 'username or password dont match' })
             } else {
-                return res.send({
-                    success:true,
-                    desiredUser
-                })
+                return res.send({ success: true, desiredUser })
             }
         });
     } catch (error) {
