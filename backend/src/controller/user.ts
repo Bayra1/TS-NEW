@@ -29,7 +29,7 @@ export const signUp = async (req: Request, res: Response) => {
                 console.log('error at signUp', error);
             }
         })
-        return res.status(201).send({ success: true, note: "New User is registered successfully"})
+        return res.status(201).send({ success: true, note: "New User is registered successfully" })
     } catch (error: any) {
         return res.status(400).send
     }
@@ -65,22 +65,25 @@ export const getOneUser = async function (req: Request, res: Response) {
 // Checking user's information
 
 export const login = async function (req: Request, res: Response) {
-    const { username, password }: { username: String, password: String } = req.body
-    try {
-        const desiredUser = await UserModel.findOne({ username })
-        if (!desiredUser) {
-            return res.status(400).send({ success: false, note: "user cannot be found" })
-        }
-        console.log(password, 'this is password');
+    const { username, password }: { username: string; password: string } = req.body
 
-        bcrypt.compare(password, desiredUser.password, async function (err, isMatch) {
-            if (!isMatch) {
-                return res.send({ success: false, note: 'username or password dont match' })
-            } else {
-                return res.send({ success: true, desiredUser })
-            }
-        });
-    } catch (error) {
-        console.log("error at checking", error);
+    const desireduser: UserType | null = await UserModel.findOne({ username })
+
+    if (!desireduser) {
+        return res.status(400).send({ success: false, note: "The DesiredUser cannot be found" })
     }
+
+    bcrypt.compare(password, desireduser.password, async function (error, isMatch) {
+        if (!isMatch) {
+            return res.status(400).send({
+                success: false,
+                note: "username or password are wrong"
+            })
+        } else {
+            return res.send({
+                success: true,
+                desireduser
+            })
+        }
+    })
 }

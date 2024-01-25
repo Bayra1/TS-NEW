@@ -23,9 +23,13 @@ export default function Login() {
             if (success === true) {
                 router.push("/MainBoard");
             } else {
-                setError('wrong Password or UserName')
+                setError('Wrong Password or UserName')
             }
         } catch (error) {
+            setError('Wrong Password or UserName')
+            setTimeout(() => {
+                setError("")
+            }, 2000)
             console.log('error at login page', error);
         }
     };
@@ -39,7 +43,7 @@ export default function Login() {
             <div className="h-screen w-6/12 flex items-center justify-center">
                 <div className="flex flex-col h-[554px] w-[384px]">
                     <div className="items-center justify-center flex flex-col mb-[20px]">
-                        <div>Welcome Back</div>
+                        <div className="text-bold text-red-400">Welcome Back</div>
                         <div>This is Login of TODO</div>
                     </div>
                     <div className="flex flex-col gap-[25px] ">

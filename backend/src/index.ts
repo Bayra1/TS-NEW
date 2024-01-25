@@ -1,6 +1,7 @@
 import  cors from "cors";
 import { connectDatabase } from "./utils/database";
 import { auth } from "./router/User";
+import { todoUrL } from "./router/Todo";
 import express from "express";
 import dotenv from "dotenv";
 import bp from "body-parser";
@@ -15,6 +16,7 @@ const start = () => {
     connectDatabase();
 
     app.use('/auth', auth)
+    app.use('/todoUrL', todoUrL)
 
     const PORT = process.env.PORT || 8000
 

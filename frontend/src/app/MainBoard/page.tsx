@@ -1,7 +1,9 @@
+import Todo from "@/component/Todo";
+
 export default function MainBoard() {
     return (
-        <div>
-            this is MainBoard
+        <div className="w-full">
+            <Todo/>
         </div>
     )
 }
