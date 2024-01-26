@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TodoSchema = new mongoose.Schema({
+const InProgressSchema = new mongoose.Schema({
     title: String,
     description: String,
     userId: {
@@ -19,6 +19,6 @@ const TodoSchema = new mongoose.Schema({
     Label: String
 });
 
-const TodoModel = mongoose.model('Todo', TodoSchema)
+const InProgressModal = mongoose.model('InProgress', InProgressSchema)
 
-export { TodoModel }
+export { InProgressModal }

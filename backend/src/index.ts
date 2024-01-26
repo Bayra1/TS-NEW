@@ -2,6 +2,7 @@ import  cors from "cors";
 import { connectDatabase } from "./utils/database";
 import { auth } from "./router/User";
 import { todoUrL } from "./router/Todo";
+import { InProgress } from "./router/InProgress";
 import express from "express";
 import dotenv from "dotenv";
 import bp from "body-parser";
@@ -17,6 +18,7 @@ const start = () => {
 
     app.use('/auth', auth)
     app.use('/todoUrL', todoUrL)
+    app.use('/InProgress', InProgress)
 
     const PORT = process.env.PORT || 8000
 

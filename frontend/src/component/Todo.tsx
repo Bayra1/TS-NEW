@@ -10,6 +10,12 @@ export default function Todo() {
         priority: "High" | "Medium" | "Low";
     }
 
+    type Category = {
+        title: string | undefined,
+        description: string | undefined,
+        status: "Todo" | "InProgress" | "Over"
+    }
+
 
     const [data, setData] = useState<Todo[]>([])
     const [title, setTitle] = useState<string | undefined>()
@@ -71,8 +77,6 @@ export default function Todo() {
                 </div>
             </div>
 
-
-
             {/* this is add button with model */}
             <button className="btn w-full" onClick={() => (document.getElementById('my_modal_3') as HTMLDialogElement).showModal()}>open modal</button>
             <dialog id="my_modal_3" className="modal">
@@ -100,9 +104,6 @@ export default function Todo() {
                     <button onClick={HandleTodo} className="btn bg-blue-700">Add Card</button>
                 </div>
             </dialog>
-
-
-
         </div>
     )
 }
